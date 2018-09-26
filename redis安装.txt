@@ -1,0 +1,19 @@
+################Centos7 安装redis##################
+1、下载Redis压缩包导入或者使用wget http://download.redis.io/releases/redis-4.0.2.tar.gz在线下载
+2、tar zxvf redis-4.0.10.tar.gz/  -C /home/redis
+3、cd /home/redis
+4、cd src   make
+5、如果报错zmalloc.h:50:31: error: jemalloc/jemalloc.h: No such file or directory
+zmalloc.h:55:2: error: #error "Newer version of jemalloc required"
+make[1]: *** [adlist.o] Error 1
+make[1]: Leaving directory `/data0/src/redis-2.6.2/src'
+make: *** [all] Error 2
+
+make MALLOC=libc 即可安装
+6、如果报错：You need tcl 8.5 or newer in order to run the Redis test make: *** [test] Error 1
+wget http://downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz  
+tar xzvf tcl8.6.1-src.tar.gz  -C /usr/local/  
+cd  /usr/local/tcl8.6.1/unix/  
+ ./configure  
+make  
+make install

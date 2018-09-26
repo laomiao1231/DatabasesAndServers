@@ -1,0 +1,35 @@
+##################Centos7 安装mysql5.7####################
+1、下载mysql压缩包mysql-5.7.23-el7-x86_64.tar.gz
+2、解压到/home文件下：tar -zxvf /home/mysql-5.7.23-el7-x86_64.tar.gz -C /usr/local/
+3、修改解压文件夹名字：mv /usr/local/mysql-5.7.23-el7-x86_64 /usr/local/mysql
+4、/usr/local/mysql下创建数据文件目录：mkdir data
+5、添加mysql用户组和mysql用户，更改mysql目录拥有者，首先检查是否有mysql用户组和mysql用户，groups mysql， 若没有，就添加 groupadd mysql   useradd -r -g mysql mysql
+6、对目录进行授权：chown -R  mysql:mysql  /var/lib/mysql chown -R  mysql:mysql  /var/run/mysql  chown -R  mysql:mysql  /var/log/mysql
+7、数据库初始化， 切换到/home/mysql目录下：bin/mysqld --initialize --user=mysql --basedir=/home/mysql/  --datadir=/home/mysql/data  一定要记住初始密码
+8、若初始化失败， 提示bin/mysqld: error while loading shared libraries: libnuma.so.1: cannot open shared object file: No such file or directory，这是缺少numactl。yum -y install numactl就可以解决这个问题
+9、切换到/home/mysql/bin下 ./mysql -hlocalhost -uroot -p 登录数据库，密码为第7步生成的密码
+10、修改密码set password=password('123456');
+11、给root授予在任意主机（%）访问任意数据库的所有权限mysql> grant all privileges on *.* to 'root'@'%' identified by '123456' with grant option; mysql> flush privileges;
+12、设置mysql配置文件/etc/my.cnf， 添加编码格式default-character-set=utf8， 防止中文乱码
+
+mysql 配置文件授权生效
+[root@hdp265dnsnfs mysql57]# cp ./support-files/mysql.server /etc/init.d/mysqld
+[root@hdp265dnsnfs mysql57]# chown 777 /etc/my.cnf 
+[root@hdp265dnsnfs mysql57]# chmod +x /etc/init.d/mysqld
+
+[root@hdp265dnsnfs mysql57]# /etc/init.d/mysqld restart
+Shutting down MySQL.. SUCCESS! 
+Starting MySQL. SUCCESS! 
+
+#设置开机启动
+
+[root@hdp265dnsnfs mysql57]# chkconfig --level 35 mysqld on
+[root@hdp265dnsnfs mysql57]# chkconfig --list mysqld
+
+[root@hdp265dnsnfs mysql57]# chmod +x /etc/rc.d/init.d/mysqld
+[root@hdp265dnsnfs mysql57]# chkconfig --add mysqld
+[root@hdp265dnsnfs mysql57]# chkconfig --list mysqld
+ 
+ vi /etc/profile/  添加export PATH=$PATH:/usr/local/bin
+
+ 保存 立即生效 source /etc/profile

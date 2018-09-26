@@ -1,0 +1,9 @@
+###############centos7 jdk安装###################
+1、解压压缩包到指定文件夹 tar zxvf jdk-8u144-linux-x64.tar.gz  -C /usr
+2、修改文件夹名字 mv jdk1.8.0_144 jdk8_144
+3、编辑配置文件/etc/profile， vi /etc/profile 追加文本：#jdk path config
+JAVA_HOME=/usr/jdk8_144
+CLASSPATH=$JAVA_HOME/lib/
+PATH=$PATH:$JAVA_HOME/bin
+export PATH JAVA_HOME CLASSPATH
+4、保存文件使配置生效， source /etc/profile

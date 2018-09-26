@@ -1,0 +1,228 @@
+su root 切换用户
+
+sudo passwd root 设置root密码
+
+sudo ufw status 查看防火墙状态
+sudo ufw enable 开启防火墙
+sudo ufw disable 关闭防火墙
+
+sudo halt|reboot 关机|重启
+
+ESC + :wq 退出vim编辑器 
+
+getconf LONG_BIT 查看系统位数
+
+sudo rm /var/cache/apt/archives/lock
+sudo rm /var/lib/dpkg/lock
+
+1. 在菜单栏里，选择虚拟机菜单的子菜单安装VMwareTools， 此时你会发现 Linux系统里多了一个VMwareTools光盘， 打开之后，
+就会发现 有一个压缩包：VMwareTools-5.5.3-34685.tar.gz， 将这个压缩包 复制到 /tmp 目录下，
+在地址栏里输入/tmp 按回车键，即可转入到/tmp 目录了， 
+然后粘贴即可完成了VMwareTools-5.5.3-34685.tar.gz这个文件的转移。
+ 
+2. 打开终端安装下面 每输入一条命令，立即按回车键： 
+ (1) cd /tmp
+(2) ls
+ (3) tar  zxf  VMwareTools-.tar.gz
+(4) ls
+(5)  cd   /tmp/vmware-tools-distrib
+(6) ls
+(7)  . /vmware-install.pl
+ 进行（7）时可能会要你用超级用户
+输入:sudo su
+之后重新输入 . /vmware-install.pl，一路回车
+ 
+VMware tools安装完要重新启动才能复制粘贴文件，若重新启动后任然不能，有可能有两个原因：1、从虚拟机拷贝到windows下的目录中有与所需拷贝的文件同名；
+2、输入“/usr/bin/vmware-user” ，因为这个进程没有启动。
+
+
+
+/**********GitLab服务器搭建****************/
+curl https://packages.gitlab.com/gpg.key 2> /dev/null | sudo apt-key add - &>/dev/null
+
+deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu xenial main
+deb https://git.ustclug.org/gitlab-cc/gitlab-ce/ubuntu xenial main 
+sudo apt-get update
+sudo apt-get install gitlab-ce
+
+sudo gitlab-ctl reconfigure
+
+sudo apt-get install curl
+sudo apt-get install openssh-server
+sudo apt-get install ca-certificates
+sudo apt-get install postfix
+
+/etc/apt/sources.list.d/gitlab-ce.list
+
+https://git.ustclug.org/gitlab-cc/gitlab-ce/ubuntu/dists/xenial/InRelease
+
+# Start all GitLab components
+sudo gitlab-ctl start
+
+# Stop all GitLab components
+sudo gitlab-ctl stop
+
+# Restart all GitLab components
+sudo gitlab-ctl restart 
+
+
+ctrl+h 显示隐藏文件
+文件a.txt得命名为b.txt，可以是mv a.txt b.txt。
+
+$ wget http://download.redis.io/releases/redis-4.0.2.tar.gz
+$ tar xzf redis-4.0.2.tar.gz   解压文件
+$ cd redis-4.0.2
+$ make 
+
+
+
+/************安装jdk****************/
+解压到指定文件夹
+sudo tar zxvf ~/Desktop/jdk-8u111-linux-x64.tar.gz  -C ~/jdk
+cd ~/jdk
+sudo mv jdk1.8.0_111/ jdk8
+
+sudo gedit  ~/.bashrc
+
+export JAVA_HOME=/home/memcached/jdk/jdk8
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib/tools.jar:${JRE_HOME}/lib/dt.jar
+export PATH=${JAVA_HOME}/bin:${JAVA_HOME}/jre/bin:$PATH 
+
+source ~/.bashrc  /**保存设置的jdk参数
+
+
+
+/**************安装idea****************/
+tar -zxvf ~/Desktop/ideaIC-2017.2.5.tar.gz -C ~/
+sudo mv idea-IC-172.4343.14/ idea
+
+进入安装目录下的bin目录，执行
+./idea.sh
+
+设置桌面快捷方式
+sudo gedit ~/Desktop/idea.desktop
+
+[Desktop Entry]
+Name=IntelliJ IDEA
+Exec=/home/memcached/idea/bin/idea.sh
+Comment=IntelliJ IDEA
+Icon=/home/memcached/idea/bin/idea.png
+Type=Application
+Terminal=false
+Encoding=UTF-8
+
+sudo chmod +x ~/Desktop/idea.desktop
+
+
+
+/**************安装Maven****************/
+sudo tar zxvf ~/Desktop/apache-maven-3.3.9-bin.tar.gz  -C ~/Maven
+sudo gedit ~/Maven/apache-maven-3.3.9/conf/settins.xml
+sudo gedit  ~/.bashrc
+
+export MAVEN_HOME=/home/memcached/Maven/apache-maven-3.3.9
+export MAVEN_OPTS="-Xms256m -Xmx512m"
+export PATH=${MAVEN_HOME}/bin:$PATH 
+
+source ~/.bashrc
+
+
+
+/**********安转mysql*************/
+sudo apt-get install mysql-server
+
+授权用户远程连接
+sudo gedit /etc/mysql/mysql.conf.d/mysqld.cnf
+注释掉bind-address = 127.0.0.1
+
+给root授予在任意主机（%）访问任意数据库的所有权限
+mysql> grant all privileges on *.* to 'root'@'%' identified by '123456' with grant option;
+mysql> flush privileges;
+
+重启使配置生效
+sudo service mysql restart
+
+
+
+/**********数据库备份与恢复***********/
+使用crontab定时任务执行shell脚本进行数据库的备份
+ crontab启动，关闭命令
+	sudo service cron start
+	sudo service cron restart
+	sudo service cron stop
+ 编写定时任务
+	
+ 简单的备份脚本
+	#! /bin/bash
+	date=`date +"%Y%m%d_%H%M%S"`
+	user="root"
+	mysqldump -h127.0.0.1 -u$user demo demo> ~/db_$date.sql
+ 授予脚本执行权限
+	sudo chmod +x ~/back.sh
+ 执行脚本
+	~/back.sh
+ 在Ubuntu命令行中执行 mysql -h127.0.0.1 -uroot -proot test < ./db_20171225_153801.sql 恢复数据库 
+ 
+ tip：
+	直接在shell脚本执行 mysqldump -h127.0.0.1 -u$user -p$passwd demo demo > ~/db_$date.sql 会出现mysql: [Warning] Using a password on the command line interface can be insecure. 一般不行结果
+	
+	解决方法：
+		sudo gedit /etc/mysql/my.cnf 
+		添加： [mysqldump]
+			   password=root
+	保存后，把脚本中的 mysqldump -h127.0.0.1 -u$user -p$passwd demo demo > ~/db_$date.sql 改为 mysqldump -h127.0.0.1 -u$user demo demo> ~/db_$date.sql 即可		
+
+	
+
+/**************安装tomcat**************/
+ 下载以.tar.gz结尾的文件
+	mkdir tomcat
+	sudo tar zxvf ~/Desktop/apache-tomcat-8.5.24.tar.gz  -C ~/
+	sudo mv ~/apache-tomcat-8.5.24/ tomcat
+	配置信息：
+	sudo gedit ~/tomcat8/bin/startup.sh
+		# Better OS/400 detection: see Bugzilla 31132
+		os400=false
+		case "`uname`" in
+		OS400*) os400=true;;
+		esac
+
+		JAVA_HOME=/home/memcached/jdk/jdk8
+		JRE_HOME=${JAVA_HOME}/jre
+		CLASSPATH=.:${JAVA_HOME}/lib/tools.jar:${JRE_HOME}/lib/dt.jar
+		PATH=${JAVA_HOME}/bin:${JAVA_HOME}/jre/bin:$PATH
+		TOMCAT_HOME=/home/memcached/tomcat8
+	sudo gedit ~/tomcat8/bin/shutdown.sh
+		# Better OS/400 detection: see Bugzilla 31132
+		os400=false
+		case "`uname`" in
+		OS400*) os400=true;;
+		esac
+
+		JAVA_HOME=/home/memcached/jdk/jdk8
+		JRE_HOME=${JAVA_HOME}/jre
+		CLASSPATH=.:${JAVA_HOME}/lib/tools.jar:${JRE_HOME}/lib/dt.jar
+		PATH=${JAVA_HOME}/bin:${JAVA_HOME}/jre/bin:$PATH
+		TOMCAT_HOME=/home/memcached/tomcat8
+		
+		更改端口:sudo gedit ~/tomcat8/conf/server.xml
+	启动：
+		sudo ~/tomcat8/bin/startup.sh
+	关闭：
+		sudo ~/tomcat8/bin/shutdown.sh
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
