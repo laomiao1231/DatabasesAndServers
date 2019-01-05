@@ -1,0 +1,16 @@
+1)   drop procedure if exists test_loop;
+2)   delimiter &&
+3)   
+create procedure test_loop1()
+BEGIN 
+DECLARE i INT DEFAULT 0;
+DECLARE n INT DEFAULT day(last_day(CURDATE()));
+WHILE i < n
+DO 
+select DATE_SUB(LAST_DAY(CURDATE()),INTERVAL i DAY) as date_time, count(1) from test where start_time <= DATE_SUB(LAST_DAY(CURDATE()),INTERVAL i DAY) and end_time >= DATE_SUB(LAST_DAY(CURDATE()),INTERVAL i DAY) order by date_time asc; 
+SET i=i+1; 
+END WHILE; 
+commit; 
+END &&
+
+4)   delimiter ;
