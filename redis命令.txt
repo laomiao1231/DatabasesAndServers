@@ -1,0 +1,50 @@
+redis常用命令 ************************
+1、String操作命令 **********************
+	set miao mxf 设置字符串类型变量，miao是Key，mxf是Value
+	get miao 通过Key获取存储字符串类型的值
+	exists miao 判断Key是否存在
+	append miao mxw 通过Key对字符串变量追加数据
+	decr miao 将Key中存在数值减1
+	decrby miao 5 将Key中存在的数值减5
+	incr miao 将Key中存在数值加1
+	incrby miao 5 将Key中存在的数值加5
+	incrfloat miao 1.1 为Key中所储存的值加上浮点数增量1.1
+	mset m x t f 一次设置多个Key-Value
+	mget m t 一个获取多个Key的值
+	setnx key value 将key的值设为value，当且仅当key不存在
+	msetnx key value key1 value1 设置一个或多个key-value对当且仅当所有给定key都不存在
+	setrange key offset value 用value参数覆写(overwrite)给定key所储存的字符串值,从偏移量 offset 开始,不存在的key当作空白字符串("\x00")处理
+	
+2、Hash操作命令 **********************
+	hset key field value 设置Key的key-map的值
+	hsetnx key field value 设置Key的key-map的值，当key不存在是可以成功
+	hget key field 得到key中的field的数据
+	hlen key 得到key的hash表的长度
+	hgetall key 返回哈希表key中，所有的键值对
+	hvals key 返回哈希表key中所有的值
+	hstrlen key field 返回哈希表key中，与给定域field相关联的值的字符串长度
+	
+3、List操作命令 **********************	
+	lpush key value 将一个或多个值value插入到列表key的表头
+	llen key 返回列表key的长度
+	lset key index value 将列表key下标为index的元素的值设置为value
+	rpop key 移除并返回列表key的尾元素
+	lpop key 移除并返回列表key的头元素
+	blpop key key1 timeout 是lpop命令的阻塞版本，当给定列表内没有任何元素可供弹出的时候，连接将被blpop命令阻塞，直到等待超时或发现可弹出元素为止，超时时间单位：秒
+	rpoplpush source destination 命令 rpoplpush 在一个原子时间内，执行以下两个动作：
+		将列表 source 中的最后一个元素(尾元素)弹出，并返回给客户端。
+		将 source 弹出的元素插入到列表 destination ，作为 destination 列表的的头元素
+		
+4、Set操作命令 **********************
+	SADD key member [member ...] 将一个或多个 member 元素加入到集合 key 当中，已经存在于集合的 member 元素将被忽略
+	SCARD key 返回集合 key 的基数(集合中元素的数量)
+	SMEMBERS key 返回集合 key 中的所有成员，不存在的 key 被视为空集合
+	SDIFF key [key ...] 返回一个集合的全部成员，该集合是所有给定集合之间的差集，不存在的 key 被视为空集
+	SDIFFSTORE destination key [key ...] 作用和 SDIFF 类似，但它将结果保存到 destination 集合，而不是简单地返回结果集，如果 destination 集合已经存在，则将其覆盖，destination 可以是 key 本身
+	SINTER key [key ...] 返回一个集合的全部成员，该集合是所有给定集合的交集，不存在的 key 被视为空集
+	SISMEMBER key member 判断 member 元素是否集合 key 的成员
+	SMOVE source destination member 将 member 元素从 source 集合移动到 destination 集合，SMOVE 是原子性操作，如果 source 集合不存在或不包含指定的 member 元素，则 SMOVE 命令不执行任何操作，仅返回 0 。否则， member 元素从 source 集合中被移除，并添加到 destination 集合中去，当 destination 集合已经包含 member 元素时， SMOVE 命令只是简单地将 source 集合中的 member 元素删除
+	SPOP key countr count为空移除并返回集合中的一个随机元素，否则随机移除count数量的数据
+	SRANDMEMBER key [count] 如果命令执行时，只提供了 key 参数，那么返回集合中的一个随机元素
+	
+	
