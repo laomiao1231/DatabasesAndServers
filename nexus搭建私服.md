@@ -1,1 +1,14 @@
-# <center>利用nexus搭建maven私服仓库</center>
+## 利用nexus搭建maven私服仓库
+### 1、官网下载 Nexus Repository Manager的安装包，下载地址为：https://www.sonatype.com/download-oss-sonatype
+### 2、解压安装包tar -zxvf /home/nexus-2.14-bundle.tar.gz -C /usr/local/nexus/
+### 3、解压后修改/usr/local/nexus/nexus-2.14/bin/nexus中添加RUN_AS_USER=root
+### 4、启动/usr/local/nexus/nexus-2.14/bin/nexus start
+### 5、初始登录账户密码为admin：admin123
+### 6、登录成功后，选择左边 Views/Repositories 菜单下的 Repositories，可以看到一些预设的仓库，我们会用到的一般只有 Public Repositories 和 3rd party ， Public Repositories 为公共仓库，3rd party 为第三方仓库，可以上传第三方的 Jar （当然也可以是自己封装的 Jar）
+### 7、上传jar到3rd party后，在maven项目中pom文件添加如下代码，即可使用
+	<repositories>
+        <repository>
+            <id>nexus</id>
+            <url>http://host:port/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
