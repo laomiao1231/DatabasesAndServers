@@ -4,7 +4,7 @@
 ### 3、解压后修改/usr/local/nexus/nexus-2.14/bin/nexus中添加RUN_AS_USER=root
 ### 4、启动/usr/local/nexus/nexus-2.14/bin/nexus start
 ### 5、初始登录账户密码为admin：admin123
-### 6、登录成功后，选择左边 Views/Repositories 菜单下的 Repositories，可以看到一些预设的仓库，我们会用到的一般只有 Public Repositories 和 3rd party ， Public Repositories 为公共仓库，3rd party 为第三方仓库，可以上传第三方的 Jar （当然也可以是自己封装的 Jar），其实在Nexus仓库中，一个仓库一般分为public(Release)仓和SNAPSHOT仓，前者存放正式版本，后者存放快照版本。如果在项目配置文件中（无论是build.gradle还是pom.xml）指定的版本号带有’-SNAPSHOT’后缀，比如版本号为’Junit-4.10-SNAPSHOT’，那么打出的包就是一个快照版本。
+### 6、登录成功后，选择左边 Views/Repositories 菜单下的 Repositories，可以看到一些预设的仓库，我们会用到的一般只有 Public Repositories 和 3rd party ， Public Repositories 为公共仓库，3rd party 为第三方仓库，可以上传第三方的 Jar （当然也可以是自己封装的 Jar），其实在Nexus仓库中，一个仓库一般分为public(Release)仓和SNAPSHOT仓，前者存放正式版本，后者存放快照版本。如果在项目配置文件中（无论是build.gradle还是pom.xml）指定的版本号带有’-SNAPSHOT’后缀，比如版本号为’Junit-4.10-SNAPSHOT’，那么打出的包就是一个快照版本。https://blog.csdn.net/wangb_java/article/details/66000956
 ### 7、上传jar到3rd party后，在maven项目中pom文件添加如下代码，即可使用
 	<repositories>
         <repository>
