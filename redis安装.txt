@@ -1,5 +1,5 @@
 ################Centos7 安装redis##################
-1、下载Redis压缩包导入或者使用wget http://download.redis.io/releases/redis-4.0.2.tar.gz在线下载
+1、下载Redis压缩包导入或者使用wget http://download.redis.io/releases/redis-4.0.10.tar.gz在线下载
 2、tar zxvf redis-4.0.10.tar.gz/  -C /home/redis
 3、cd /home/redis
 4、cd src   make
