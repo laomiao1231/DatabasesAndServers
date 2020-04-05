@@ -6,7 +6,7 @@
 5、添加mysql用户组和mysql用户，更改mysql目录拥有者，首先检查是否有mysql用户组和mysql用户，groups mysql， 若没有，就添加 groupadd mysql   useradd -r -g mysql mysql
 6、对目录进行授权：chown -R  mysql:mysql  /var/lib/mysql chown -R  mysql:mysql  /var/run/mysql  chown -R  mysql:mysql  /var/log/mysql
 7、数据库初始化， 切换到/home/mysql目录下：bin/mysqld --initialize --user=mysql --basedir=/home/mysql/  --datadir=/home/mysql/data  一定要记住初始密码
-8、若初始化失败， 提示bin/mysqld: error while loading shared libraries: libnuma.so.1: cannot open shared object file: No such file or directory，这是缺少numactl。yum -y install numactl就可以解决这个问题
+8、若初始化失败， 提示bin/mysqld: error while loading shared libraries: libnuma.so.1: cannot open shared object file: No such file or directory，这是缺少numactl。yum -y install numactl  yum install -y libaio 就可以解决这个问题
 9、切换到/home/mysql/bin下 ./mysql -hlocalhost -uroot -p 登录数据库，密码为第7步生成的密码
 10、修改密码set password=password('123456');
 11、给root授予在任意主机（%）访问任意数据库的所有权限mysql> grant all privileges on *.* to 'root'@'%' identified by '123456' with grant option; mysql> flush privileges;
